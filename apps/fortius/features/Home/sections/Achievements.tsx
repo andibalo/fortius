@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { useScroll, useTransform, motion, MotionValue } from 'motion/react';
+import { useScroll, useTransform, motion, MotionValue, clamp } from 'motion/react';
 
 const ITEMS = [
   {
@@ -41,8 +41,8 @@ const ITEMS = [
   },
 ];
 
-const X_POS = [+14,  +10,    0,   -38,   -58]; // vw
-const Y_POS = [+90,  +40,    0,   -10,   -18]; // vh
+const X_POS = [+14, +10, 0, -38, -58]; // vw
+const Y_POS = [+90, +40, 0, -10, -18]; // vh
 const POS_KEYS = [-2, -1, 0, 1, 2];
 
 function evalPath(pos: number, path: number[]): number {
@@ -59,15 +59,15 @@ function evalPath(pos: number, path: number[]): number {
 function useCardMotion(scroll: MotionValue<number>, index: number, total: number) {
   const pos = (p: number) => p * (total - 1) - index;
 
-  const x      = useTransform(scroll, (p) => `${evalPath(pos(p), X_POS)}vw`);
-  const y      = useTransform(scroll, (p) => `${evalPath(pos(p), Y_POS)}vh`);
-  const scale  = useTransform(scroll, (p) => Math.max(0.05, 1 - Math.abs(pos(p)) * 0.54));
+  const x = useTransform(scroll, (p) => `${evalPath(pos(p), X_POS)}vw`);
+  const y = useTransform(scroll, (p) => `${evalPath(pos(p), Y_POS)}vh`);
+  const scale = useTransform(scroll, (p) => Math.max(0.05, 1 - Math.abs(pos(p)) * 0.54));
   const rotate = useTransform(scroll, (p) => -pos(p) * 4);
   const zIndex = useTransform(scroll, (p) => Math.max(0, Math.round(20 - Math.abs(pos(p)) * 8)));
 
   const opacity = useTransform(scroll, (p) => {
     const a = Math.abs(pos(p));
-    if (a >= 2)   return 0;
+    if (a >= 2) return 0;
     if (a >= 1.5) return 1 - (a - 1.5) * 2;
     return 1;
   });
@@ -89,7 +89,7 @@ function Card({
   const { x, y, scale, rotate, zIndex, opacity } = useCardMotion(scroll, index, total);
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
       <motion.div
         style={{ x, y, scale, rotate, zIndex, opacity }}
         className="w-[min(620px,80vw)] will-change-transform"
@@ -137,6 +137,7 @@ export default function Achievements() {
 
   const N = ITEMS.length;
   const dotY = useTransform(scrollYProgress, [0, 1], [0, 154]);
+  const marqueeX = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
 
   return (
     <section
@@ -148,6 +149,20 @@ export default function Achievements() {
       <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#4a0070] rounded-full mix-blend-screen filter blur-[280px] opacity-20 pointer-events-none" />
+
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full z-10 pointer-events-none opacity-[0.08] overflow-hidden">
+          <motion.div className="flex whitespace-nowrap will-change-transform w-[200vw]" style={{ translateX: marqueeX }}>
+            {[...Array(2)].map((_, i) => (
+              <h2
+                key={i}
+                className="font-oswald text-[#9b00e8] text-[25vw] md:text-[20vw] font-bold tracking-impact-extreme uppercase px-8"
+                style={{ fontFamily: 'var(--font-oswald)' }}
+              >
+                ACHIEVEMENTS • ACHIEVEMENTS •
+              </h2>
+            ))}
+          </motion.div>
+        </div>
 
         {ITEMS.map((item, i) => (
           <Card key={item.id} item={item} index={i} scroll={scrollYProgress} total={N} />
