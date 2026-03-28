@@ -1,134 +1,180 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import { clamp, mapRange, easeOutBack } from '@/lib/scrollUtils';
+import { useRef } from 'react';
+import { useScroll, useTransform, motion, MotionValue } from 'motion/react';
 
-const ITEMS: {
-  index: number;
-  finalX: number;
-  finalY: number;
-  finalRot: number;
-  className: string;
-  imgSrc: string;
-  imgAlt: string;
-  label?: string;
-}[] = [
-  { index: 0, finalX: -38, finalY: -8, finalRot: -2, className: 'w-40 md:w-60 aspect-[3/4] opacity-70', imgSrc: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Cairo' },
-  { index: 1, finalX: -19, finalY: 8, finalRot: 1, className: 'w-40 md:w-60 aspect-[4/5]', imgSrc: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop', imgAlt: 'Oslo' },
-  { index: 2, finalX: 0, finalY: 0, finalRot: 0, className: 'w-64 md:w-96 aspect-[16/9] z-10 glass-box', imgSrc: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Sydney', label: 'SYDNEY' },
-  { index: 3, finalX: 19, finalY: 8, finalRot: -1, className: 'w-40 md:w-60 aspect-[4/5]', imgSrc: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Tokyo' },
-  { index: 4, finalX: 38, finalY: -8, finalRot: 2, className: 'w-40 md:w-60 aspect-[3/4] opacity-70', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'London' },
+const ITEMS = [
+  {
+    id: '01',
+    category: 'VALORANT',
+    title: 'REGIONAL\nCHAMPS',
+    year: '2026',
+    img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: '02',
+    category: 'MOBILE LEGENDS',
+    title: 'NATIONAL\nCUP',
+    year: '2025',
+    img: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: '03',
+    category: 'PUBG MOBILE',
+    title: 'GRAND\nFINALS',
+    year: '2025',
+    img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop',
+  },
+  {
+    id: '04',
+    category: 'SEASON AWARD',
+    title: 'MVP\nX14',
+    year: '2024',
+    img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop',
+  },
+  {
+    id: '05',
+    category: 'COMMUNITY',
+    title: '1M\nFANBASE',
+    year: '2024',
+    img: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop',
+  },
 ];
+
+const X_POS = [+14,  +10,    0,   -38,   -58]; // vw
+const Y_POS = [+90,  +40,    0,   -10,   -18]; // vh
+const POS_KEYS = [-2, -1, 0, 1, 2];
+
+function evalPath(pos: number, path: number[]): number {
+  const p = Math.max(-2, Math.min(2, pos));
+  for (let i = 0; i < POS_KEYS.length - 1; i++) {
+    if (p >= POS_KEYS[i] && p <= POS_KEYS[i + 1]) {
+      const t = (p - POS_KEYS[i]) / (POS_KEYS[i + 1] - POS_KEYS[i]);
+      return path[i] + (path[i + 1] - path[i]) * t;
+    }
+  }
+  return path[path.length - 1];
+}
+
+function useCardMotion(scroll: MotionValue<number>, index: number, total: number) {
+  const pos = (p: number) => p * (total - 1) - index;
+
+  const x      = useTransform(scroll, (p) => `${evalPath(pos(p), X_POS)}vw`);
+  const y      = useTransform(scroll, (p) => `${evalPath(pos(p), Y_POS)}vh`);
+  const scale  = useTransform(scroll, (p) => Math.max(0.05, 1 - Math.abs(pos(p)) * 0.54));
+  const rotate = useTransform(scroll, (p) => -pos(p) * 4);
+  const zIndex = useTransform(scroll, (p) => Math.max(0, Math.round(20 - Math.abs(pos(p)) * 8)));
+
+  const opacity = useTransform(scroll, (p) => {
+    const a = Math.abs(pos(p));
+    if (a >= 2)   return 0;
+    if (a >= 1.5) return 1 - (a - 1.5) * 2;
+    return 1;
+  });
+
+  return { x, y, scale, rotate, zIndex, opacity };
+}
+
+function Card({
+  item,
+  index,
+  scroll,
+  total,
+}: {
+  item: (typeof ITEMS)[number];
+  index: number;
+  scroll: MotionValue<number>;
+  total: number;
+}) {
+  const { x, y, scale, rotate, zIndex, opacity } = useCardMotion(scroll, index, total);
+
+  return (
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <motion.div
+        style={{ x, y, scale, rotate, zIndex, opacity }}
+        className="w-[min(620px,80vw)] will-change-transform"
+      >
+        <div className="relative aspect-[3/2] rounded-2xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.img}
+            className="w-full h-full object-cover"
+            alt={item.title}
+            draggable={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+          <span className="absolute top-5 right-6 text-[10px] font-mono text-white/40 tracking-widest">
+            {item.year}
+          </span>
+
+          <div className="absolute bottom-7 left-7">
+            <p className="text-[10px] font-bold tracking-[0.3em] text-white/50 uppercase mb-2">
+              {item.category}
+            </p>
+            <h3
+              className="font-oswald font-bold text-white tracking-impact leading-none whitespace-pre-line"
+              style={{
+                fontFamily: 'var(--font-oswald)',
+                fontSize: 'clamp(2.2rem, 5.5vw, 4rem)',
+              }}
+            >
+              {item.title}
+            </h3>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function Achievements() {
   const sectionRef = useRef<HTMLElement>(null);
-  const wrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const textMoverRef = useRef<HTMLDivElement>(null);
-  const TOTAL = ITEMS.length;
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const update = () => {
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const gProgress = rect.top <= 0
-        ? clamp(Math.abs(rect.top) / (section.offsetHeight - vh), 0, 1)
-        : 0;
-
-      if (textMoverRef.current) {
-        textMoverRef.current.style.transform = `translate3d(-${gProgress * 50}%, 0, 0)`;
-      }
-
-      wrapperRefs.current.forEach((wrapper, i) => {
-        if (!wrapper) return;
-        const { finalX, finalY, finalRot } = ITEMS[i];
-        const startP = i * (0.8 / TOTAL);
-        const localP = clamp((gProgress - startP) / 0.35, 0, 1);
-        const easeSnap = easeOutBack(localP);
-
-        const opacity = mapRange(localP, 0, 0.15, 0, 1);
-        const scale = mapRange(easeSnap, 0, 1, 0.05, 1);
-
-        const direction = i % 2 === 0 ? 1 : -1;
-        const sweepAngle = mapRange(easeSnap, 0, 1, Math.PI * 1.5, 0);
-        const sweepRadiusX = mapRange(easeSnap, 0, 1, 50, 0);
-        const spiralX = Math.sin(sweepAngle) * sweepRadiusX * direction;
-        const spiralY = mapRange(easeSnap, 0, 1, 100 + i * 8, 0);
-        const spiralZ = mapRange(easeSnap, 0, 1, -2000, 0);
-
-        const rotY = mapRange(easeSnap, 0, 1, 90 * direction, 0);
-        const rotZ = mapRange(easeSnap, 0, 1, 60 * direction, finalRot);
-        const rotX = mapRange(easeSnap, 0, 1, 45, 0);
-
-        wrapper.style.opacity = String(opacity);
-        wrapper.style.transform = `translate3d(calc(-50% + ${finalX + spiralX}vw), calc(-50% + ${finalY + spiralY}vh), ${spiralZ}px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg) scale(${scale})`;
-      });
-    };
-
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-    return () => window.removeEventListener('scroll', update);
-  }, [TOTAL]);
+  const N = ITEMS.length;
+  const dotY = useTransform(scrollYProgress, [0, 1], [0, 154]);
 
   return (
     <section
       ref={sectionRef}
-      data-bg="#05000a"
+      data-bg="#111111"
       id="gallery-track"
-      className="h-[800vh] relative z-20"
+      className="h-[600vh] relative z-20"
     >
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center pointer-events-none">
-        {/* Background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#4a0070] rounded-full mix-blend-screen filter blur-[250px] opacity-40" />
+      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
 
-        {/* Scrolling DIVISION text */}
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full z-10 pointer-events-none opacity-[0.08] overflow-hidden">
-          <div ref={textMoverRef} className="flex whitespace-nowrap will-change-transform w-[400vw]">
-            {[...Array(4)].map((_, i) => (
-              <h2
-                key={i}
-                className="font-oswald text-[#9b00e8] text-[25vw] md:text-[20vw] font-bold tracking-impact-extreme uppercase px-8"
-                style={{ fontFamily: 'var(--font-oswald)' }}
-              >
-                ACHIEVEMENTS
-              </h2>
-            ))}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#4a0070] rounded-full mix-blend-screen filter blur-[280px] opacity-20 pointer-events-none" />
+
+        {ITEMS.map((item, i) => (
+          <Card key={item.id} item={item} index={i} scroll={scrollYProgress} total={N} />
+        ))}
+
+        {/* Vertical progress indicator */}
+        <div className="absolute left-8 md:left-12 top-1/2 -translate-y-1/2 flex flex-col items-center gap-3 pointer-events-none z-50">
+          <span
+            className="font-oswald text-[11px] font-bold text-white/40 tracking-widest"
+            style={{ fontFamily: 'var(--font-oswald)' }}
+          >
+            01
+          </span>
+          <div className="relative h-40 w-px bg-white/15 rounded-full">
+            <motion.div
+              className="absolute left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
+              style={{ top: dotY }}
+            />
           </div>
+          <span
+            className="font-oswald text-[11px] font-bold text-white/40 tracking-widest"
+            style={{ fontFamily: 'var(--font-oswald)' }}
+          >
+            {String(N).padStart(2, '0')}
+          </span>
         </div>
 
-        {/* 3D card grid */}
-        <div className="relative w-full max-w-[120rem] mx-auto h-full perspective-scene z-30 pointer-events-none">
-          {ITEMS.map(({ index, className, imgSrc, imgAlt, label }) => (
-            <div
-              key={index}
-              ref={(el) => { wrapperRefs.current[index] = el; }}
-              className="spiral-wrapper"
-            >
-              <div
-                className={`division-item ${className} rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 group interactive pointer-events-auto relative`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={imgSrc}
-                  className="w-full h-full object-cover blend-lum group-hover:mix-blend-normal group-hover:scale-110 transition-all duration-1000"
-                  alt={imgAlt}
-                />
-                {label && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end justify-center pb-6 opacity-90 group-hover:opacity-100 transition-opacity">
-                    <h3
-                      className="font-oswald text-3xl md:text-5xl font-bold tracking-impact-extreme text-white drop-shadow-2xl group-hover:scale-105 transition-transform duration-700"
-                      style={{ fontFamily: 'var(--font-oswald)' }}
-                    >
-                      {label}
-                    </h3>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
