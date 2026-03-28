@@ -21,33 +21,9 @@ export default function HeroParticleSphere() {
 
     renderer.domElement.style.opacity = '0';
     renderer.domElement.style.transition = 'opacity 2s cubic-bezier(0.19, 1, 0.22, 1)';
-    setTimeout(() => (renderer.domElement.style.opacity = '1'), 800);
 
     const group = new THREE.Group();
     scene.add(group);
-
-    const coreGeo = new THREE.IcosahedronGeometry(1.2, 2);
-    const coreMat = new THREE.MeshBasicMaterial({
-      color: 0x9b00e8,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.3,
-    });
-    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-    group.add(coreMesh);
-
-    const COUNT = 1800;
-    const RADIUS = 1.65;
-    const geo = new THREE.SphereGeometry(0.035, 16, 16);
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      metalness: 1.0,
-      roughness: 0.1,
-      transmission: 0.8,
-      thickness: 0.5,
-    });
-    const instancedMesh = new THREE.InstancedMesh(geo, mat, COUNT);
-    group.add(instancedMesh);
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.4));
     const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
@@ -60,25 +36,27 @@ export default function HeroParticleSphere() {
     whiteLight.position.set(5, 5, 5);
     scene.add(whiteLight);
 
-    const positions: THREE.Vector3[] = [];
-    const colorDark = new THREE.Color('#050505');
-    const colorAccent = new THREE.Color('#ffffff');
-    const colorWhite = new THREE.Color('#ffffff');
-    const colorTemp = new THREE.Color();
+    const geo = new THREE.SphereGeometry(0.045, 16, 16);
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: 0x9b00e8,
+      metalness: 0.8,
+      roughness: 0.2,
+      transmission: 0.3,
+      thickness: 0.5,
+      emissive: new THREE.Color(0x4a0070),
+      emissiveIntensity: 0.6,
+    });
+
     const dummy = new THREE.Object3D();
 
-    for (let i = 0; i < COUNT; i++) {
-      const phi = Math.acos(1 - 2 * (i + 0.5) / COUNT);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-      const x = RADIUS * Math.cos(theta) * Math.sin(phi);
-      const y = RADIUS * Math.sin(theta) * Math.sin(phi);
-      const z = RADIUS * Math.cos(phi);
-      positions.push(new THREE.Vector3(x, y, z));
-      dummy.position.set(x, y, z);
-      dummy.updateMatrix();
-      instancedMesh.setMatrixAt(i, dummy.matrix);
-      instancedMesh.setColorAt(i, colorDark);
-    }
+    let instancedMesh: THREE.InstancedMesh | null = null;
+    let positions: THREE.Vector3[] = [];
+    let animId: number;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const startTime = performance.now();
+    const targetMousePos = new THREE.Vector3();
 
     const updateGroupPosition = () => {
       if (window.innerWidth > 768) {
@@ -89,8 +67,6 @@ export default function HeroParticleSphere() {
     };
     updateGroupPosition();
 
-    let mouseX = 0;
-    let mouseY = 0;
     const onMouseMove = (e: MouseEvent) => {
       mouseX = (e.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -105,13 +81,12 @@ export default function HeroParticleSphere() {
     };
     window.addEventListener('resize', onResize);
 
-    const clock = new THREE.Clock();
-    const targetMousePos = new THREE.Vector3();
-    let animId: number;
-
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
+      if (!instancedMesh || positions.length === 0) return;
+
+      const time = (performance.now() - startTime) / 1000;
+      const COUNT = positions.length;
 
       const vec = new THREE.Vector3(mouseX, mouseY, 0.5);
       vec.unproject(camera);
@@ -120,21 +95,8 @@ export default function HeroParticleSphere() {
       targetMousePos.copy(camera.position).add(dir.multiplyScalar(dist));
       group.worldToLocal(targetMousePos);
 
-      group.rotation.y += 0.005;
-      group.rotation.x += 0.002;
-      coreMesh.rotation.y -= 0.002;
-      coreMesh.rotation.x -= 0.003;
-
-      const blob1 = new THREE.Vector3(
-        Math.sin(time * 0.8) * RADIUS,
-        Math.cos(time * 0.6) * RADIUS,
-        Math.sin(time * 1.1) * RADIUS
-      );
-      const blob2 = new THREE.Vector3(
-        Math.cos(time * 1.2) * RADIUS,
-        Math.sin(time * 0.9) * RADIUS,
-        Math.cos(time * 0.7) * RADIUS
-      );
+      group.rotation.y = Math.sin(time * 0.4) * 0.12;
+      group.rotation.x = Math.sin(time * 0.25) * 0.06;
 
       for (let i = 0; i < COUNT; i++) {
         const basePos = positions[i];
@@ -147,37 +109,71 @@ export default function HeroParticleSphere() {
           currentPos.add(repel.multiplyScalar(force * 0.8));
         }
 
-        const dist1 = currentPos.distanceTo(blob1);
-        const dist2 = currentPos.distanceTo(blob2);
-        const minDist = Math.min(dist1, dist2);
-
-        let scale: number;
-        if (minDist < 0.9) {
-          const n = 1 - minDist / 0.9;
-          scale = 1.0 + n * 1.5;
-          colorTemp.copy(colorAccent).lerp(colorWhite, n);
-        } else if (minDist < 2.0) {
-          const n = 1 - (minDist - 0.9) / 1.1;
-          scale = 0.5 + n * 0.5;
-          colorTemp.copy(colorDark).lerp(colorAccent, n);
-        } else {
-          scale = 0.5;
-          colorTemp.copy(colorDark);
-        }
-
         dummy.position.copy(currentPos);
-        dummy.scale.set(scale, scale, scale);
-        dummy.lookAt(new THREE.Vector3(0, 0, 0));
+        dummy.scale.set(1, 1, 1);
         dummy.updateMatrix();
         instancedMesh.setMatrixAt(i, dummy.matrix);
-        instancedMesh.setColorAt(i, colorTemp);
       }
 
       instancedMesh.instanceMatrix.needsUpdate = true;
-      if (instancedMesh.instanceColor) instancedMesh.instanceColor.needsUpdate = true;
       renderer.render(scene, camera);
     };
-    animate();
+
+    // ── Sample image pixels → 3D particle positions ───────────────────────
+    const img = new Image();
+    img.src = '/panther-mask.png';
+    img.onload = () => {
+      const SAMPLE_SIZE = 300; // internal canvas resolution for sampling
+      const offscreen = document.createElement('canvas');
+      offscreen.width = SAMPLE_SIZE;
+      offscreen.height = SAMPLE_SIZE;
+      const ctx = offscreen.getContext('2d');
+      if (!ctx) return;
+
+      ctx.drawImage(img, 0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
+      const { data } = ctx.getImageData(0, 0, SAMPLE_SIZE, SAMPLE_SIZE);
+
+      const LOGO_SCALE = 5.5; // world-unit size of the logo
+      const DEPTH     = 0.5; // random Z spread for 3D depth
+
+      const sampled: THREE.Vector3[] = [];
+      for (let y = 0; y < SAMPLE_SIZE; y++) {
+        for (let x = 0; x < SAMPLE_SIZE; x++) {
+          const idx = (y * SAMPLE_SIZE + x) * 4;
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
+          const a = data[idx + 3];
+
+          const isLogo = a > 128 && !(r > 220 && g > 220 && b > 220);
+          if (!isLogo) continue;
+
+          const nx = ((x / SAMPLE_SIZE) * 2 - 1) * (LOGO_SCALE / 2);
+          const ny = -((y / SAMPLE_SIZE) * 2 - 1) * (LOGO_SCALE / 2); // flip Y
+          const nz = (Math.random() - 0.5) * DEPTH;
+          sampled.push(new THREE.Vector3(nx, ny, nz));
+        }
+      }
+
+      const MAX = 1800;
+      const step = Math.max(1, Math.floor(sampled.length / MAX));
+      positions = sampled.filter((_, i) => i % step === 0);
+
+      const COUNT = positions.length;
+      instancedMesh = new THREE.InstancedMesh(geo, mat, COUNT);
+      group.add(instancedMesh);
+
+      for (let i = 0; i < COUNT; i++) {
+        dummy.position.copy(positions[i]);
+        dummy.updateMatrix();
+        instancedMesh.setMatrixAt(i, dummy.matrix);
+        instancedMesh.setColorAt(i, new THREE.Color('#9b00e8'));
+      }
+      instancedMesh.instanceMatrix.needsUpdate = true;
+
+      setTimeout(() => (renderer.domElement.style.opacity = '1'), 800);
+      animate();
+    };
 
     return () => {
       cancelAnimationFrame(animId);
