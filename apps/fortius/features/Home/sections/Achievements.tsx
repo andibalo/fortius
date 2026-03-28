@@ -13,23 +13,14 @@ const ITEMS: {
   imgAlt: string;
   label?: string;
 }[] = [
-  { index: 0, finalX: -36, finalY: -30, finalRot: -2, className: 'w-32 md:w-48 aspect-[3/4] opacity-70', imgSrc: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Cairo' },
-  { index: 1, finalX: -12, finalY: -30, finalRot: 1, className: 'w-32 md:w-48 aspect-square', imgSrc: 'https://images.unsplash.com/photo-1616091093714-c64882e9ab55?q=80&w=2000&auto=format&fit=crop', imgAlt: 'Manila' },
-  { index: 2, finalX: 12, finalY: -30, finalRot: -1, className: 'w-32 md:w-48 aspect-[4/5]', imgSrc: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop', imgAlt: 'Oslo' },
-  { index: 3, finalX: 36, finalY: -30, finalRot: 2, className: 'w-32 md:w-48 aspect-square', imgSrc: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Tokyo' },
-  { index: 4, finalX: -42, finalY: 0, finalRot: -1, className: 'w-32 md:w-48 aspect-video', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'London' },
-  { index: 5, finalX: -21, finalY: 0, finalRot: 2, className: 'w-32 md:w-48 aspect-[3/4]', imgSrc: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Seoul' },
-  { index: 6, finalX: 0, finalY: 0, finalRot: 0, className: 'w-56 md:w-80 aspect-[16/9] z-10 glass-box', imgSrc: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Sydney', label: 'SYDNEY' },
-  { index: 7, finalX: 21, finalY: 0, finalRot: -1, className: 'w-32 md:w-48 aspect-square', imgSrc: 'https://images.unsplash.com/photo-1616091093714-c64882e9ab55?q=80&w=2000&auto=format&fit=crop', imgAlt: 'Berlin', label: 'Berlin' },
-  { index: 8, finalX: 42, finalY: 0, finalRot: 1, className: 'w-32 md:w-48 aspect-video', imgSrc: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Paris' },
-  { index: 9, finalX: -40, finalY: 30, finalRot: 2, className: 'w-32 md:w-48 aspect-square', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Bogota' },
-  { index: 10, finalX: -20, finalY: 30, finalRot: -2, className: 'w-32 md:w-48 aspect-video', imgSrc: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop', imgAlt: 'Miami' },
-  { index: 11, finalX: 0, finalY: 30, finalRot: 0, className: 'w-32 md:w-48 aspect-video', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Madrid', label: 'MADRID' },
-  { index: 12, finalX: 20, finalY: 30, finalRot: -1, className: 'w-32 md:w-48 aspect-[3/4]', imgSrc: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Dallas' },
-  { index: 13, finalX: 40, finalY: 30, finalRot: 1, className: 'w-32 md:w-48 aspect-square', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Tokyo 2' },
+  { index: 0, finalX: -38, finalY: -8, finalRot: -2, className: 'w-40 md:w-60 aspect-[3/4] opacity-70', imgSrc: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Cairo' },
+  { index: 1, finalX: -19, finalY: 8, finalRot: 1, className: 'w-40 md:w-60 aspect-[4/5]', imgSrc: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop', imgAlt: 'Oslo' },
+  { index: 2, finalX: 0, finalY: 0, finalRot: 0, className: 'w-64 md:w-96 aspect-[16/9] z-10 glass-box', imgSrc: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Sydney', label: 'SYDNEY' },
+  { index: 3, finalX: 19, finalY: 8, finalRot: -1, className: 'w-40 md:w-60 aspect-[4/5]', imgSrc: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop', imgAlt: 'Tokyo' },
+  { index: 4, finalX: 38, finalY: -8, finalRot: 2, className: 'w-40 md:w-60 aspect-[3/4] opacity-70', imgSrc: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', imgAlt: 'London' },
 ];
 
-export default function Divisions() {
+export default function Achievements() {
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRefs = useRef<(HTMLDivElement | null)[]>([]);
   const textMoverRef = useRef<HTMLDivElement>(null);
@@ -101,7 +92,7 @@ export default function Divisions() {
                 className="font-oswald text-[#9b00e8] text-[25vw] md:text-[20vw] font-bold tracking-impact-extreme uppercase px-8"
                 style={{ fontFamily: 'var(--font-oswald)' }}
               >
-                DIVISION
+                ACHIEVEMENTS
               </h2>
             ))}
           </div>

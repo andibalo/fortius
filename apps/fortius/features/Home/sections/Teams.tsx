@@ -1,120 +1,205 @@
+'use client';
+
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
+
 const teams = [
   {
     id: '01',
     name: 'VALORANT',
     category: 'Tactical FPS',
-    detail: 'Recognized for bold execution, visual rhythm, and design consistency.',
-    dotColor: 'bg-white',
+    detail: 'Precision, strategy, and split-second execution on the global stage.',
     image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop',
   },
   {
     id: '02',
-    name: ['MOBILE', 'LEGENDS'],
+    name: 'MOBILE LEGENDS',
     category: 'Mobile MOBA',
-    detail: 'Awarded for outstanding execution, seamless animation, and originality.',
-    dotColor: 'bg-blue-500',
+    detail: "Dominating Southeast Asia's most competitive mobile battlefield.",
     image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop',
   },
   {
     id: '03',
-    name: ['PUBG', 'MOBILE'],
+    name: 'PUBG MOBILE',
     category: 'Battle Royale',
-    detail: 'Celebrated for front end excellence, design innovation, and development.',
-    dotColor: 'bg-orange-500',
+    detail: 'Elite marksmanship and tactical awareness across every drop zone.',
     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop',
   },
 ];
 
-export default function Teams() {
+const TRANSITION = 0.12;
+
+function TeamSlide({
+  team,
+  index,
+  count,
+  scrollYProgress,
+}: {
+  team: (typeof teams)[number];
+  index: number;
+  count: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const slot = 1 / count;
+
+  const entryStart = index * slot - TRANSITION;
+  const entryEnd   = index * slot;
+  const exitStart  = (index + 1) * slot - TRANSITION;
+  const exitEnd    = (index + 1) * slot;
+  const isFirst    = index === 0;
+  const isLast     = index === count - 1;
+
+  const y = useTransform(
+    scrollYProgress,
+    isFirst
+      ? [exitStart, exitEnd]
+      : isLast
+        ? [Math.max(0, entryStart), entryEnd]
+        : [Math.max(0, entryStart), entryEnd, exitStart, exitEnd],
+    isFirst
+      ? ['0vh', '-100vh']
+      : isLast
+        ? ['100vh', '0vh']
+        : ['100vh', '0vh', '0vh', '-100vh']
+  );
+
   return (
-    <section
-      data-bg="#150020"
-      id="teams"
-      className="relative z-30 pb-32 pt-20 border-t border-white/5"
+    <motion.div
+      style={{ y, zIndex: index + 1 }}
+      className="absolute inset-0 will-change-transform bg-[#0a000f]"
     >
-      {/* Sticky marquee header */}
-      <div className="sticky top-0 w-full overflow-hidden border-y border-white/10 py-4 z-20 shadow-2xl backdrop-blur-md bg-black/30">
-        <div className="flex w-[200vw] md:w-[200%] animate-scroll-rl will-change-transform">
-          <h2
-            className="text-outline text-7xl md:text-[8rem] font-oswald font-bold whitespace-nowrap px-8 tracking-impact-extreme uppercase"
-            style={{ fontFamily: 'var(--font-oswald)' }}
-          >
-            TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS •{' '}
-          </h2>
-          <h2
-            className="text-outline text-7xl md:text-[8rem] font-oswald font-bold whitespace-nowrap px-8 tracking-impact-extreme uppercase"
-            style={{ fontFamily: 'var(--font-oswald)' }}
-          >
-            TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS •{' '}
-          </h2>
+      <h2
+        className="absolute left-[5%] font-oswald font-black uppercase leading-none text-white whitespace-nowrap select-none"
+        style={{
+          fontFamily: 'var(--font-oswald)',
+          fontSize: 'clamp(56px, 13vw, 210px)',
+          top: 'calc(52px + 2vh)',   /* just below marquee */
+          zIndex: 20,
+        }}
+      >
+        {team.name}
+      </h2>
+      <div
+        className="absolute left-[5%] right-[5%] rounded-[1.5rem] overflow-hidden"
+        style={{
+          top: 'calc(52px + 9vh)',   /* image top sits ~60% down the title */
+          height: '62vh',
+          zIndex: 10,
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={team.image}
+          alt={team.name}
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable={false}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+        <div className="absolute bottom-7 left-8 flex flex-col gap-3">
+          <span className="inline-flex w-fit items-center rounded-full border border-white/50 bg-transparent px-4 py-1.5 text-[11px] font-bold tracking-[0.18em] text-white uppercase">
+            {team.category}
+          </span>
+          <p className="text-white text-base md:text-xl font-medium leading-snug max-w-[40ch]">
+            {team.detail}
+          </p>
         </div>
       </div>
+    </motion.div>
+  );
+}
 
-      <div className="w-full flex flex-col relative z-20 mt-12">
-        {/* Column headers */}
-        <div className="hidden md:flex justify-between items-center gap-8 px-6 md:px-12 py-4 text-xs font-bold tracking-widest text-gray-500 uppercase border-b border-white/20">
-          <div className="w-24">ID</div>
-          <div className="flex-1">DIVISION</div>
-          <div className="w-64 text-right">CATEGORY</div>
-        </div>
+function DotIndicator({
+  index,
+  count,
+  scrollYProgress,
+}: {
+  index: number;
+  count: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const slot   = 1 / count;
+  const start  = index * slot;
+  const end    = (index + 1) * slot;
+  const buffer = 0.03;
 
-        {/* Team rows */}
-        {teams.map(({ id, name, category, detail, dotColor, image }) => (
-          <div
-            key={id}
-            className="team-row group cursor-pointer relative px-6 md:px-12 border-b border-white/10 interactive overflow-hidden"
-          >
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full">
-              {/* ID + Name */}
-              <div className="flex items-center gap-4 md:gap-8 shrink-0">
-                <div className="text-2xl md:text-3xl text-gray-500 font-bold font-mono group-hover:text-[#9b00e8] transition-colors duration-500">
-                  {id}
-                </div>
-                <h3
-                  className="font-oswald text-5xl md:text-6xl lg:text-[5.5rem] font-bold uppercase text-white group-hover:text-[#9b00e8] tracking-impact transition-colors duration-500 leading-none"
-                  style={{ fontFamily: 'var(--font-oswald)' }}
-                >
-                  {Array.isArray(name) ? (
-                    <>
-                      {name[0]}
-                      <br className="hidden md:block" />
-                      {name[1]}
-                    </>
-                  ) : (
-                    name
-                  )}
-                </h3>
-              </div>
+  const opacity = useTransform(
+    scrollYProgress,
+    [
+      Math.max(0, start - buffer),
+      Math.min(1, start + buffer),
+      Math.max(0, end - buffer),
+      Math.min(1, end + buffer),
+    ],
+    index === 0 ? [1, 1, 1, 0.25] : [0.25, 1, 1, 0.25]
+  );
 
-              {/* Reveal image */}
-              <div className="team-image-reveal md:block rounded-2xl overflow-hidden border border-[#9b00e8]/30 shadow-[0_0_30px_rgba(155,0,232,0.4)]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={image}
-                  className="w-full h-full object-cover scale-150 group-hover:scale-100 transition-transform duration-[800ms] mix-blend-luminosity group-hover:mix-blend-normal"
-                  alt={Array.isArray(name) ? name.join(' ') : name}
-                />
-              </div>
+  const scale = useTransform(
+    scrollYProgress,
+    [
+      Math.max(0, start - buffer),
+      Math.min(1, start + buffer),
+      Math.max(0, end - buffer),
+      Math.min(1, end + buffer),
+    ],
+    index === 0 ? [1.4, 1.4, 1.4, 0.7] : [0.7, 1.4, 1.4, 0.7]
+  );
 
-              {/* Category + detail */}
-              <div className="md:text-right text-gray-400 group-hover:text-white transition-colors duration-500 min-w-0 flex-shrink flex-1 md:flex-none ml-auto md:max-w-[280px] mt-4 md:mt-0">
-                <h4 className="font-bold mb-0 tracking-widest text-sm uppercase flex items-center md:justify-end gap-3">
-                  <span
-                    className={`w-2 h-2 rounded-full ${dotColor} group-hover:bg-[#9b00e8] transition-colors duration-500 shadow-[0_0_10px_rgba(155,0,232,0.8)]`}
-                  />
-                  {category}
-                </h4>
-                <div className="expandable-content">
-                  <div className="expandable-inner">
-                    <p className="text-sm leading-relaxed font-medium pb-2">
-                      <span className="content-hover">{detail}</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+  return (
+    <motion.div
+      style={{ opacity, scale }}
+      className="w-2 h-2 rounded-full bg-white"
+    />
+  );
+}
+
+export default function Teams() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
+
+  return (
+    <section
+      ref={sectionRef}
+      data-bg="#0a000f"
+      id="teams"
+      className="h-[400vh] relative z-30"
+    >
+      <div className="sticky top-0 w-full h-screen overflow-hidden bg-[#0a000f]">
+        <div className="absolute top-0 left-0 right-0 z-50 overflow-hidden border-b border-white/10 py-3 backdrop-blur-md bg-black/40">
+          <div className="flex w-[200vw] animate-scroll-rl will-change-transform">
+            {[0, 1].map((n) => (
+              <h2
+                key={n}
+                className="text-outline text-5xl md:text-6xl font-oswald font-bold whitespace-nowrap px-8 tracking-impact-extreme uppercase"
+                style={{ fontFamily: 'var(--font-oswald)' }}
+              >
+                TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS • TEAMS •{' '}
+              </h2>
+            ))}
           </div>
+        </div>
+        {teams.map((team, i) => (
+          <TeamSlide
+            key={team.id}
+            team={team}
+            index={i}
+            count={teams.length}
+            scrollYProgress={scrollYProgress}
+          />
         ))}
+        <div className="absolute right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+          {teams.map((_, i) => (
+            <DotIndicator
+              key={i}
+              index={i}
+              count={teams.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

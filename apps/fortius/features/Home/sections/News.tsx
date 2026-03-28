@@ -11,7 +11,7 @@ const NEWS_ITEMS = [
     title: 'Fortius Claims Regional Championship Title',
     description:
       'After a grueling 5-match grand final, our Valorant roster secured the top spot at the Asia-Pacific Regional Championship, cementing our place in the global circuit.',
-    gradientClass: 'from-[#9b00e8]/40 via-[#4a0070]/20 to-[#050505]',
+    gradientClass: 'from-[#9b00e8]/70 via-[#4a0070]/50 to-[#0a0010]',
     badgeClass: 'bg-[#9b00e8] text-white',
     accentColor: '#9b00e8',
   },
@@ -22,7 +22,7 @@ const NEWS_ITEMS = [
     title: 'Introducing Our New Mobile Legends Lineup',
     description:
       'Seven new players join the Fortius family as we expand our Mobile Legends division ahead of the 2026 season. Meet the squad built to dominate.',
-    gradientClass: 'from-[#c1121f]/40 via-[#800010]/20 to-[#050505]',
+    gradientClass: 'from-[#c1121f]/70 via-[#800010]/50 to-[#100004]',
     badgeClass: 'bg-[#c1121f] text-white',
     accentColor: '#c1121f',
   },
@@ -33,7 +33,7 @@ const NEWS_ITEMS = [
     title: 'Fortius x TechArena: Official Gear Partnership',
     description:
       'We have partnered with TechArena to equip every Fortius athlete with cutting-edge peripherals and custom rigs, ensuring peak performance under pressure.',
-    gradientClass: 'from-white/10 via-white/5 to-[#050505]',
+    gradientClass: 'from-white/25 via-white/10 to-[#0e0e0e]',
     badgeClass: 'bg-white text-[#050505]',
     accentColor: '#ffffff',
   },
@@ -67,7 +67,8 @@ export default function News() {
     [0, 0.12, 0.25, 0.50, 0.75],
     [0.85, 1, 0.95, 0.9, 0.85]
   );
-  const card1Opacity = useTransform(scrollYProgress, [0, 0.06], [0, 1]);
+
+  const card1Opacity = useTransform(scrollYProgress, (v) => v < 0.32 ? 1 : 0);
 
   const card2Y = useTransform(
     scrollYProgress,
@@ -79,7 +80,7 @@ export default function News() {
     [0.20, 0.32, 0.50, 0.75],
     [0.85, 1, 0.95, 0.9]
   );
-  const card2Opacity = useTransform(scrollYProgress, [0.20, 0.26], [0, 1]);
+  const card2Opacity = useTransform(scrollYProgress, (v) => v >= 0.20 && v < 0.54 ? 1 : 0);
 
   const card3Y = useTransform(
     scrollYProgress,
@@ -91,7 +92,7 @@ export default function News() {
     [0.42, 0.54, 0.75],
     [0.85, 1, 0.95]
   );
-  const card3Opacity = useTransform(scrollYProgress, [0.42, 0.48], [0, 1]);
+  const card3Opacity = useTransform(scrollYProgress, (v) => v >= 0.42 && v < 0.77 ? 1 : 0);
 
   const card4Y = useTransform(
     scrollYProgress,
@@ -99,7 +100,7 @@ export default function News() {
     ['100vh', '0vh']
   );
   const card4Scale = useTransform(scrollYProgress, [0.65, 0.77], [0.85, 1]);
-  const card4Opacity = useTransform(scrollYProgress, [0.65, 0.71], [0, 1]);
+  const card4Opacity = useTransform(scrollYProgress, (v) => v >= 0.65 ? 1 : 0);
 
   const cardTransforms = [
     { y: card1Y, scale: card1Scale, opacity: card1Opacity, zIndex: 10 },
@@ -136,14 +137,8 @@ export default function News() {
               className="font-oswald font-bold leading-none text-[#9b00e8]/15 text-[8vw]"
               style={{ fontFamily: 'var(--font-oswald)' }}
             >
-              05
-            </span>
-            <h2
-              className="font-oswald text-4xl md:text-6xl font-bold tracking-impact text-white"
-              style={{ fontFamily: 'var(--font-oswald)' }}
-            >
               NEWS
-            </h2>
+            </span>
           </div>
 
           {/* Progress dots */}
@@ -171,10 +166,10 @@ export default function News() {
                 opacity: cardTransforms[i].opacity,
               }}
             >
-              <div className="news-card glass-box rounded-[2rem] border border-white/10 overflow-hidden grid grid-cols-1 md:grid-cols-2 interactive">
+              <div className="news-card glass-box bg-[#0e0e0e] rounded-[2rem] border border-white/20 overflow-hidden grid grid-cols-1 md:grid-cols-2 interactive">
 
                 {/* Image area */}
-                <div className={`relative overflow-hidden aspect-[4/3] md:aspect-auto bg-gradient-to-br ${item.gradientClass}`}>
+                <div className={`relative overflow-hidden aspect-[4/3] md:aspect-auto bg-[#111] bg-gradient-to-br ${item.gradientClass}`}>
                   <div className="absolute inset-0 bg-grid-pattern" />
                   <div className="absolute inset-0 bg-hatch opacity-10" />
                   <span

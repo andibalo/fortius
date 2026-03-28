@@ -6,7 +6,7 @@ import Hero from './sections/Hero';
 import About from './sections/About';
 import VisionMission from './sections/VisionMission';
 import Teams from './sections/Teams';
-import Divisions from './sections/Divisions';
+import Achievements from './sections/Achievements';
 import News from './sections/News';
 import QnA from './sections/QnA';
 import FooterSection from './sections/FooterSection';
@@ -41,7 +41,7 @@ export default function HomeClient() {
       <About />
       <VisionMission />
       <Teams />
-      <Divisions />
+      <Achievements />
       <News />
       <QnA />
       <FooterSection />
