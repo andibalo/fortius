@@ -1,0 +1,22 @@
+{
+  "name": "fortius-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:fortius": "turbo dev --filter=@fortius/fortius",
+    "dev:fortitude": "turbo dev --filter=@fortius/fortitude",
+    "dev:intools": "turbo dev --filter=@fortius/intools",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "api:dev": "cd apps/api && go run ./cmd/server",
+    "api:build": "cd apps/api && go build -o bin/server ./cmd/server"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
