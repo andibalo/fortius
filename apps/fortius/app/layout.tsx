@@ -44,7 +44,7 @@ export const metadata: Metadata = {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Fortius Esports — Fight. Dominate. Win.',
+        alt: 'Fortius Esports | Fight. Dominate. Win.',
       },
     ],
   },
@@ -57,9 +57,9 @@ export const metadata: Metadata = {
     images: ['/twitter-image'],
   },
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
   themeColor: '#9b00e8',
   alternates: {
@@ -75,7 +75,7 @@ const jsonLd = {
       '@id': `${SITE_URL}/#organization`,
       name: 'Fortius Esports',
       url: SITE_URL,
-      logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
       sameAs: [
         'https://twitter.com/FortiusEsports',
         'https://instagram.com/FortiusEsports',

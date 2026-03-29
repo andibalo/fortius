@@ -1,96 +1,89 @@
-const galleryImages = [
-  'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1564049489314-60d154ff107d?q=80&w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=300&h=300&fit=crop',
-];
+'use client';
+
+import Image from 'next/image';
 
 export default function FooterSection() {
   return (
     <footer
       data-bg="#050505"
       id="contact"
-      className="relative z-20 pt-24 pb-8 border-t border-white/10 overflow-hidden"
+      className="relative z-20 border-t border-white/10 overflow-hidden"
     >
-      {/* Image strip */}
-      <div className="flex gap-4 px-4 overflow-hidden mb-32 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-1000 interactive">
-        {galleryImages.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={i}
-            src={src}
-            className={`${i === 5 ? 'hidden md:block' : ''} w-32 h-32 md:w-56 md:h-56 rounded-2xl object-cover hover:scale-105 transition-transform duration-1000`}
-            alt={`Gallery ${i + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* Back to top */}
-      <div className="flex flex-col items-center justify-center mb-32">
-        <p className="text-sm text-gray-400 tracking-widest uppercase mb-8 text-center max-w-sm font-bold content-hover">
-          Forged in the fires of competition. Built for legacy.
-        </p>
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="btn-swipe border border-white rounded-full px-12 py-4 text-sm font-bold tracking-widest text-white hover:text-black transition-all duration-500 interactive"
-        >
-          <span>BACK TO TOP</span>
-        </button>
-      </div>
-
-      {/* Links */}
-      <div className="max-w-screen-2xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative z-10">
-        <div className="mb-12 md:mb-0">
-          <h4
-            className="text-white font-oswald text-2xl font-bold mb-6 tracking-wide"
-            style={{ fontFamily: 'var(--font-oswald)' }}
-          >
-            Quick Links
-          </h4>
-          <div className="flex flex-col gap-3 text-base text-gray-500 font-medium">
-            {['Home', 'Gallery', 'Work', 'Contact'].map((label) => (
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col-reverse md:flex-row">
+          <div className="w-full md:w-1/3 flex flex-col items-center md:items-start px-6 md:px-12 py-12 md:py-16">
+            <div className="w-full text-center md:text-left mb-8 md:mb-12">
+              <p className="text-xs md:text-[11px] lg:text-sm text-gray-400 leading-relaxed font-medium content-hover">
+Universitas Multimedia Nusantara Jl. Scientia Boulevard, Gading Serpong Tangerang, Banten  -  15811  Indonesia
+              </p>
+              <p className="text-xs md:text-[11px] lg:text-sm text-gray-400 leading-relaxed font-medium content-hover">
+                 (t) +62-21.5422.0808; (f) +62-21.5422.0800
+              </p>
+            </div>
+            <div className="w-full flex justify-center md:justify-start mb-3">
               <a
-                key={label}
-                href={label === 'Gallery' ? '#gallery-track' : label === 'Work' ? '#teams' : label === 'Contact' ? '#contact' : '#'}
-                className="hover:text-[#9b00e8] hover:pl-2 transition-all interactive"
+                href="https://instagram.com/fortiusesports"
+                target="_blank"
+                rel="noreferrer"
+                className="text-gray-400 hover:text-[color:var(--primary)] transition-colors interactive flex items-center gap-3"
+                aria-label="Fortius Esports Instagram"
               >
-                <span className="hover-smooth">{label}</span>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5Zm4.25 4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM17.5 6.25a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" />
+                </svg>
+                <span className="text-xs md:text-[11px] lg:text-sm font-medium">@fortiusesports</span>
               </a>
-            ))}
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/3 flex flex-col items-center justify-center py-12 md:py-16 md:py-0">
+            <div className="flex flex-col items-center">
+              <div className="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center mb-6 relative">
+                <Image
+                  src="/logo.png"
+                  alt="Fortius Logo"
+                  width={128}
+                  height={128}
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
+              <p className="text-xs md:text-[11px] text-center text-gray-400 font-medium">FORTIUS ESPORTS</p>
+              <p className="text-[10px] md:text-[9px] text-center text-gray-500 mt-2">© 2026 All Rights Reserved</p>
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/3 flex flex-col items-center md:items-end px-6 md:px-12 py-12 md:py-16">
+            <div className="flex items-center justify-center md:justify-end gap-6">
+              <a href="#" className="group">
+                  <Image
+                    src="/images/logo-bem.png"
+                    alt="BEM Logo"
+                    width={100}
+                    height={100}
+                    className="w-full h-24 object-contain p-2"
+                  />
+              </a>
+              <a href="#" className="group">
+                  <Image
+                    src="/images/logo-umn.png"
+                    alt="UMN Logo"
+                    width={100}
+                    height={100}
+                    className="w-full h-24 object-contain p-2"
+                  />
+              </a>
+            </div>
           </div>
         </div>
-
-        <div className="text-left md:text-right">
-          <h4
-            className="text-white font-oswald text-2xl font-bold mb-6 tracking-wide"
-            style={{ fontFamily: 'var(--font-oswald)' }}
-          >
-            Networks
-          </h4>
-          <div className="flex flex-col gap-3 text-base text-gray-500 font-medium">
-            {['Instagram', 'Twitter', 'Dribbble'].map((platform) => (
-              <a
-                key={platform}
-                href="#"
-                className="hover:text-[#9b00e8] md:hover:pr-2 transition-all interactive"
-              >
-                <span className="hover-smooth">{platform}</span>
-              </a>
-            ))}
-          </div>
-        </div>
       </div>
 
-      {/* ©2026 large text */}
-      <div className="w-full overflow-hidden flex justify-center mt-16 opacity-80 pointer-events-none relative z-10">
-        <h1
-          className="font-oswald text-[30vw] font-bold tracking-impact-extreme leading-none text-white/5 mix-blend-screen"
-          style={{ fontFamily: 'var(--font-oswald)' }}
-        >
-          ©2026
-        </h1>
+      {/* HUD Status Bar */}
+      <div className="w-full border-t border-white/20 bg-black/40 backdrop-blur-xl flex justify-between items-center px-6 md:px-12 py-3 text-[10px] md:text-xs font-bold tracking-widest text-white uppercase z-20">
+        <span className="content-hover">Fortius Esports // 2026</span>
+        <span className="hidden md:block text-[#9b00e8] content-hover">Dominate</span>
+        <span className="hidden md:block text-[#9b00e8] content-hover">Win</span>
+        <span className="content-hover">Fight. Dominate. Win.</span>
       </div>
     </footer>
   );
