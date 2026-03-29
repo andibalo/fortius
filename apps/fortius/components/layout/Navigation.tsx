@@ -1,9 +1,18 @@
+import Image from "next/image";
+
 export default function Navigation() {
   return (
     <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none mix-blend-difference text-white">
       {/* Logo */}
       <div className="font-oswald text-2xl font-bold tracking-widest pointer-events-auto interactive flex items-center gap-2 transition-transform duration-500 hover:scale-105">
-        <span className="hover-smooth">• FORTIUS •</span>
+        <Image
+          src="/logo.png"
+          alt="Fortius Logo"
+          width={32}
+          height={32}
+          className="h-8 w-auto"
+        />
+        <span className="hover-smooth ml-1">FORTIUS</span>
       </div>
 
       {/* Nav Icons */}

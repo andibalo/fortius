@@ -121,7 +121,7 @@ export default function HeroParticleSphere() {
 
     // ── Sample image pixels → 3D particle positions ───────────────────────
     const img = new Image();
-    img.src = '/panther-mask.png';
+    img.src = '/logo.png';
     img.onload = () => {
       const SAMPLE_SIZE = 300; // internal canvas resolution for sampling
       const offscreen = document.createElement('canvas');
