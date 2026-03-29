@@ -79,7 +79,7 @@ function StatCard({
         </span>
         <div className="expandable-content">
           <div className="expandable-inner">
-            <p className="text-[11px] md:text-xs text-gray-800 leading-tight font-bold pb-2">{detail}</p>
+            <p className="text-[11px] md:text-xs text-white leading-tight font-bold pb-2">{detail}</p>
           </div>
         </div>
       </div>
