@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { useScroll, useTransform, motion, MotionValue, clamp } from 'motion/react';
+import { useScroll, useTransform, motion, MotionValue } from 'motion/react';
 
 const ITEMS = [
   {
