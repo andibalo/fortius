@@ -124,13 +124,7 @@ function DotIndicator({
 
   const opacity = useTransform(
     scrollYProgress,
-    [
-      Math.max(0, start - buffer),
-      Math.min(1, start + buffer),
-      Math.max(0, end - buffer),
-      Math.min(1, end + buffer),
-    ],
-    index === 0 ? [1, 1, 1, 0.25] : [0.25, 1, 1, 0.25]
+    (v) => v >= start && v < end ? 1 : 0.25
   );
 
   const scale = useTransform(
