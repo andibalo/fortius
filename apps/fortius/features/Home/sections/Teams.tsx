@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
 
 const teams = [
@@ -9,21 +10,21 @@ const teams = [
     name: 'VALORANT',
     category: 'Tactical FPS',
     detail: 'Precision, strategy, and split-second execution on the global stage.',
-    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/valorant-team-bg.jpg',
   },
   {
     id: '02',
     name: 'MOBILE LEGENDS',
     category: 'Mobile MOBA',
     detail: "Dominating Southeast Asia's most competitive mobile battlefield.",
-    image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/mole-team-bg.jpg',
   },
   {
     id: '03',
     name: 'PUBG MOBILE',
     category: 'Battle Royale',
     detail: 'Elite marksmanship and tactical awareness across every drop zone.',
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/pubgm-team-bg.jpg',
   },
 ];
 
@@ -73,7 +74,7 @@ function TeamSlide({
         style={{
           fontFamily: 'var(--font-oswald)',
           fontSize: 'clamp(56px, 13vw, 210px)',
-          top: 'calc(52px + 2vh)',   /* just below marquee */
+          top: 'calc(52px + 2vh)',  
           zIndex: 20,
         }}
       >
@@ -82,16 +83,16 @@ function TeamSlide({
       <div
         className="absolute left-[5%] right-[5%] rounded-[1.5rem] overflow-hidden"
         style={{
-          top: 'calc(52px + 9vh)',   /* image top sits ~60% down the title */
+          top: 'calc(52px + 9vh)',  
           height: '62vh',
           zIndex: 10,
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={team.image}
           alt={team.name}
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
           draggable={false}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />

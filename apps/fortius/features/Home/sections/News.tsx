@@ -6,49 +6,92 @@ import { useScroll, useTransform, motion } from 'motion/react';
 const NEWS_ITEMS = [
   {
     id: '01',
-    category: 'TOURNAMENT',
-    date: 'MAR 2026',
-    title: 'Fortius Claims Regional Championship Title',
+    category: 'COMMUNITY',
+    date: 'JAN 2026',
+    title: 'Fortius Website: Your Ultimate Esports Hub',
     description:
-      'After a grueling 5-match grand final, our Valorant roster secured the top spot at the Asia-Pacific Regional Championship, cementing our place in the global circuit.',
-    gradientClass: 'from-[#9b00e8]/70 via-[#4a0070]/50 to-[#0a0010]',
+      'Fortius Website akan segera hadir sebagai pusat esports yang lengkap. Nantinya, Anda dapat mendaftar turnamen, membeli merchandise resmi, dan selalu mengikuti perkembangan terbaru dunia esports melalui satu platform yang terintegrasi.',
+    gradientClass: 'from-[#9b00e8]/20 via-[#c1121f]/10 to-[#050505]',
     badgeClass: 'bg-[#9b00e8] text-white',
     accentColor: '#9b00e8',
   },
   {
     id: '02',
-    category: 'ROSTER',
-    date: 'FEB 2026',
-    title: 'Introducing Our New Mobile Legends Lineup',
-    description:
-      'Seven new players join the Fortius family as we expand our Mobile Legends division ahead of the 2026 season. Meet the squad built to dominate.',
-    gradientClass: 'from-[#c1121f]/70 via-[#800010]/50 to-[#100004]',
-    badgeClass: 'bg-[#c1121f] text-white',
-    accentColor: '#c1121f',
-  },
-  {
-    id: '03',
-    category: 'PARTNERSHIP',
+    category: 'RECRUITMENT',
     date: 'JAN 2026',
-    title: 'Fortius x TechArena: Official Gear Partnership',
+    title: 'Fortius Newcomers 2026',
     description:
-      'We have partnered with TechArena to equip every Fortius athlete with cutting-edge peripherals and custom rigs, ensuring peak performance under pressure.',
-    gradientClass: 'from-white/25 via-white/10 to-[#0e0e0e]',
-    badgeClass: 'bg-white text-[#050505]',
-    accentColor: '#ffffff',
-  },
-  {
-    id: '04',
-    category: 'COMMUNITY',
-    date: 'DEC 2025',
-    title: 'Fortius Academy Opens Applications for Gen 8',
-    description:
-      'Our talent pipeline program returns for its eighth cohort. Applications are now open for aspiring pros across all active titles. Limited slots available.',
-    gradientClass: 'from-[#9b00e8]/20 via-[#c1121f]/10 to-[#050505]',
+      'Fortius dengan penuh semangat menyambut talenta baru melalui open recruitment pertama di 2026. Kami yakin setiap anggota akan membawa energi dan prestasi gemilang. Ikuti media sosial kami untuk info rekrutmen berikutnya!',
+    gradientClass: 'from-[#9b00e8]/70 via-[#4a0070]/50 to-[#0a0010]',
     badgeClass: 'bg-[#9b00e8] text-white',
     accentColor: '#9b00e8',
   },
+  // To add more cards, uncomment or append items here — transforms auto-adjust.
+  // {
+  //   id: '03',
+  //   category: 'ROSTER',
+  //   date: 'FEB 2026',
+  //   title: 'Introducing Our New Mobile Legends Lineup',
+  //   description:
+  //     'Seven new players join the Fortius family as we expand our Mobile Legends division ahead of the 2026 season. Meet the squad built to dominate.',
+  //   gradientClass: 'from-[#c1121f]/70 via-[#800010]/50 to-[#100004]',
+  //   badgeClass: 'bg-[#c1121f] text-white',
+  //   accentColor: '#c1121f',
+  // },
+  // {
+  //   id: '04',
+  //   category: 'PARTNERSHIP',
+  //   date: 'JAN 2026',
+  //   title: 'Fortius x TechArena: Official Gear Partnership',
+  //   description:
+  //     'We have partnered with TechArena to equip every Fortius athlete with cutting-edge peripherals and custom rigs, ensuring peak performance under pressure.',
+  //   gradientClass: 'from-white/25 via-white/10 to-[#0e0e0e]',
+  //   badgeClass: 'bg-white text-[#050505]',
+  //   accentColor: '#ffffff',
+  // },
 ];
+
+const COUNT = NEWS_ITEMS.length;
+const ENTRY_DUR = 0.12; 
+const STEP = COUNT > 1 ? (0.8 - ENTRY_DUR) / (COUNT - 1) : 0.68;
+const SECTION_HEIGHT = `${COUNT * 150}vh`;
+
+function yFrames(i: number): { input: number[]; output: string[] } {
+  if (i >= COUNT) return { input: [0, 1], output: ['100vh', '100vh'] };
+  const enter = i * STEP;
+  const settle = enter + ENTRY_DUR;
+  const input: number[] = [enter, settle];
+  const output: string[] = ['100vh', '0vh'];
+
+  for (let j = i + 1; j < COUNT; j++) {
+    input.push(j * STEP + ENTRY_DUR);
+    output.push(`${-(j - i) * 3}vh`);
+  }
+  return { input, output };
+}
+
+function scaleFrames(i: number): { input: number[]; output: number[] } {
+  if (i >= COUNT) return { input: [0, 1], output: [0.85, 0.85] };
+  const enter = i * STEP;
+  const settle = enter + ENTRY_DUR;
+  const input: number[] = [enter, settle];
+  const output: number[] = [0.85, 1];
+  for (let j = i + 1; j < COUNT; j++) {
+    input.push(j * STEP + ENTRY_DUR);
+    output.push(Math.max(0.85, 1 - 0.05 * (j - i)));
+  }
+  return { input, output };
+}
+
+const Y = [yFrames(0), yFrames(1), yFrames(2), yFrames(3)];
+const SC = [scaleFrames(0), scaleFrames(1), scaleFrames(2), scaleFrames(3)];
+
+function activeIdx(v: number): number {
+  for (let i = COUNT - 1; i >= 0; i--) {
+    if (v >= i * STEP) return i;
+  }
+  return 0;
+}
 
 export default function News() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -57,76 +100,62 @@ export default function News() {
     offset: ['start start', 'end end'],
   });
 
-  const card1Y = useTransform(
-    scrollYProgress,
-    [0, 0.12, 0.25, 0.50, 0.75],
-    ['100vh', '0vh', '-3vh', '-6vh', '-9vh']
-  );
-  const card1Scale = useTransform(
-    scrollYProgress,
-    [0, 0.12, 0.25, 0.50, 0.75],
-    [0.85, 1, 0.95, 0.9, 0.85]
-  );
+  const c0Y     = useTransform(scrollYProgress, Y[0].input,  Y[0].output);
+  const c1Y     = useTransform(scrollYProgress, Y[1].input,  Y[1].output);
+  const c2Y     = useTransform(scrollYProgress, Y[2].input,  Y[2].output);
+  const c3Y     = useTransform(scrollYProgress, Y[3].input,  Y[3].output);
 
-  const card1Opacity = useTransform(scrollYProgress, (v) => v < 0.32 ? 1 : 0);
+  const c0Scale = useTransform(scrollYProgress, SC[0].input, SC[0].output);
+  const c1Scale = useTransform(scrollYProgress, SC[1].input, SC[1].output);
+  const c2Scale = useTransform(scrollYProgress, SC[2].input, SC[2].output);
+  const c3Scale = useTransform(scrollYProgress, SC[3].input, SC[3].output);
 
-  const card2Y = useTransform(
-    scrollYProgress,
-    [0.20, 0.32, 0.50, 0.75],
-    ['100vh', '0vh', '-3vh', '-6vh']
-  );
-  const card2Scale = useTransform(
-    scrollYProgress,
-    [0.20, 0.32, 0.50, 0.75],
-    [0.85, 1, 0.95, 0.9]
-  );
-  const card2Opacity = useTransform(scrollYProgress, (v) => v >= 0.20 && v < 0.54 ? 1 : 0);
-
-  const card3Y = useTransform(
-    scrollYProgress,
-    [0.42, 0.54, 0.75],
-    ['100vh', '0vh', '-3vh']
-  );
-  const card3Scale = useTransform(
-    scrollYProgress,
-    [0.42, 0.54, 0.75],
-    [0.85, 1, 0.95]
-  );
-  const card3Opacity = useTransform(scrollYProgress, (v) => v >= 0.42 && v < 0.77 ? 1 : 0);
-
-  const card4Y = useTransform(
-    scrollYProgress,
-    [0.65, 0.77],
-    ['100vh', '0vh']
-  );
-  const card4Scale = useTransform(scrollYProgress, [0.65, 0.77], [0.85, 1]);
-  const card4Opacity = useTransform(scrollYProgress, (v) => v >= 0.65 ? 1 : 0);
+  const c0Opacity = useTransform(scrollYProgress, (v) => {
+    if (COUNT < 1) return 0;
+    if (v < 0) return 0;
+    return COUNT === 1 || v < 1 * STEP + ENTRY_DUR ? 1 : 0;
+  });
+  const c1Opacity = useTransform(scrollYProgress, (v) => {
+    if (COUNT < 2) return 0;
+    if (v < 1 * STEP) return 0;
+    return COUNT === 2 || v < 2 * STEP + ENTRY_DUR ? 1 : 0;
+  });
+  const c2Opacity = useTransform(scrollYProgress, (v) => {
+    if (COUNT < 3) return 0;
+    if (v < 2 * STEP) return 0;
+    return COUNT === 3 || v < 3 * STEP + ENTRY_DUR ? 1 : 0;
+  });
+  const c3Opacity = useTransform(scrollYProgress, (v) => {
+    if (COUNT < 4) return 0;
+    return v >= 3 * STEP ? 1 : 0;
+  });
 
   const cardTransforms = [
-    { y: card1Y, scale: card1Scale, opacity: card1Opacity, zIndex: 10 },
-    { y: card2Y, scale: card2Scale, opacity: card2Opacity, zIndex: 20 },
-    { y: card3Y, scale: card3Scale, opacity: card3Opacity, zIndex: 30 },
-    { y: card4Y, scale: card4Scale, opacity: card4Opacity, zIndex: 40 },
+    { y: c0Y, scale: c0Scale, opacity: c0Opacity, zIndex: 10 },
+    { y: c1Y, scale: c1Scale, opacity: c1Opacity, zIndex: 20 },
+    { y: c2Y, scale: c2Scale, opacity: c2Opacity, zIndex: 30 },
+    { y: c3Y, scale: c3Scale, opacity: c3Opacity, zIndex: 40 },
   ];
 
-  const activeIdx = (v: number) => (v < 0.20 ? 0 : v < 0.42 ? 1 : v < 0.65 ? 2 : 3);
-  const dot0Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 0 ? 1 : 0.25);
-  const dot1Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 1 ? 1 : 0.25);
-  const dot2Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 2 ? 1 : 0.25);
-  const dot3Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 3 ? 1 : 0.25);
-  const dot0Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 0 ? '1.5rem' : '0.5rem');
-  const dot1Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 1 ? '1.5rem' : '0.5rem');
-  const dot2Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 2 ? '1.5rem' : '0.5rem');
-  const dot3Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 3 ? '1.5rem' : '0.5rem');
+  const d0Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 0 ? 1 : 0.25);
+  const d1Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 1 ? 1 : 0.25);
+  const d2Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 2 ? 1 : 0.25);
+  const d3Opacity = useTransform(scrollYProgress, (v) => activeIdx(v) === 3 ? 1 : 0.25);
 
-  const dotOpacities = [dot0Opacity, dot1Opacity, dot2Opacity, dot3Opacity];
-  const dotWidths = [dot0Width, dot1Width, dot2Width, dot3Width];
+  const d0Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 0 ? '1.5rem' : '0.5rem');
+  const d1Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 1 ? '1.5rem' : '0.5rem');
+  const d2Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 2 ? '1.5rem' : '0.5rem');
+  const d3Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 3 ? '1.5rem' : '0.5rem');
+
+  const dotOpacities = [d0Opacity, d1Opacity, d2Opacity, d3Opacity];
+  const dotWidths    = [d0Width,   d1Width,   d2Width,   d3Width];
 
   return (
     <section
       ref={sectionRef}
       data-bg="#050505"
-      className="h-[600vh] relative z-20"
+      className="relative z-20"
+      style={{ height: SECTION_HEIGHT }}
     >
       <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-none">
 
@@ -152,6 +181,7 @@ export default function News() {
             ))}
           </div>
         </div>
+
         {NEWS_ITEMS.map((item, i) => (
           <div
             key={item.id}
@@ -161,8 +191,8 @@ export default function News() {
             <motion.article
               className="w-full max-w-5xl pointer-events-auto"
               style={{
-                y: cardTransforms[i].y,
-                scale: cardTransforms[i].scale,
+                y:       cardTransforms[i].y,
+                scale:   cardTransforms[i].scale,
                 opacity: cardTransforms[i].opacity,
               }}
             >
@@ -199,12 +229,12 @@ export default function News() {
                       {item.description}
                     </p>
                   </div>
-                  <a
+                  {/* <a
                     href="#"
                     className="btn-swipe w-max mt-8 border border-white/30 rounded-full px-8 py-3 text-xs font-bold tracking-widest text-white inline-block"
                   >
                     <span>READ MORE</span>
-                  </a>
+                  </a> */}
                 </div>
 
               </div>

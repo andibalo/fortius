@@ -6,30 +6,30 @@ import { clamp, easeOutBack } from '@/lib/scrollUtils';
 
 const STATS = [
   {
-    value: '27x',
+    value: '20+',
     label: 'CHAMPIONSHIPS',
-    detail: 'Secured across multiple premier global tournaments.',
+    detail: 'Secured across multiple university and public tournaments.',
     fromX: -90, fromY: -60, fromRot: -22,
     range: [0.22, 0.48] as [number, number],
   },
   {
-    value: '14x',
-    label: 'MVP AWARDS',
-    detail: 'Recognizing unparalleled individual dominance on stage.',
+    value: '300jt+',
+    label: 'PRIZE POOL EARNINGS',
+    detail: 'Accumulated from tournament victories.',
     fromX: -40, fromY: 80, fromRot: 18,
     range: [0.30, 0.54] as [number, number],
   },
   {
     value: '5+',
     label: 'ROSTERS',
-    detail: 'Active elite rosters competing globally across regions.',
+    detail: 'Elite teams competing across Indonesia and beyond.',
     fromX: 60, fromY: -70, fromRot: -14,
     range: [0.38, 0.60] as [number, number],
   },
   {
-    value: '1M+',
-    label: 'COMMUNITY',
-    detail: 'Dedicated fanbase actively supporting our global legacy.',
+    value: '15+',
+    label: 'TOURNAMENTS HOSTED',
+    detail: 'Community events fostering competitive esports growth.',
     fromX: 100, fromY: 30, fromRot: 20,
     range: [0.45, 0.66] as [number, number],
   },
@@ -69,7 +69,7 @@ function StatCard({
     >
       <div className="relative z-10 flex flex-col justify-center transition-transform duration-700 group-hover:-translate-y-2">
         <span
-          className="font-oswald text-5xl lg:text-6xl font-bold text-white group-hover:text-black transition-colors tracking-impact"
+          className="font-oswald text-4xl lg:text-5xl font-bold text-white group-hover:text-black transition-colors tracking-impact"
           style={{ fontFamily: 'var(--font-oswald)' }}
         >
           {value}
@@ -121,7 +121,7 @@ export default function About() {
       ref={sectionRef}
       data-bg="#0a0014"
       id="about-track"
-      className="h-[500vh] relative z-20"
+      className="h-[350vh] relative z-20"
     >
       <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center">
         <motion.div
@@ -154,7 +154,7 @@ export default function About() {
                 >
                   <span className="content-hover">LINK</span>
                   <br />
-                  <span className="content-hover">PENDAFTARAN</span>
+                  <span className="content-hover">Registrasi</span>
                 </h3>
                 <a
                   href="#"
@@ -185,11 +185,8 @@ export default function About() {
               className="text-xl md:text-3xl text-gray-400 leading-tight font-light mb-12 max-w-4xl tracking-tight will-change-transform"
             >
               <span className="content-hover">
-                Founded with a vision to redefine competitive gaming. Fortius is more than a team; it&apos;s a{' '}
-                <strong className="text-white font-medium">
-                  syndicate of elite talent, strategic minds, and creative visionaries.
-                </strong>{' '}
-                We blend raw mechanical skill with sophisticated macro gameplay to dismantle opponents across every major title.
+                <strong className="text-white font-medium">Fortius Esports</strong> adalah organisasi olahraga elektronik <strong className="text-white font-medium">Universitas Multimedia Nusantara</strong> yang didirikan pada Februari 2019.
+                Kami menyediakan wadah bagi mahasiswa untuk mengeksplorasi dan mengembangkan bakat mereka di dunia esports yang dinamis, baik sebagai pemain kompetitif maupun sebagai bagian dari tim manajemen.
               </span>
             </motion.p>
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-16 md:mt-24 w-full items-start">

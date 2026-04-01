@@ -46,7 +46,7 @@ export default function VisionMission() {
       ref={sectionRef}
       data-bg="#080010"
       id="scroll-track"
-      className="h-[500vh] relative z-20"
+      className="h-[350vh] relative z-20"
     >
       <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center pointer-events-none">
 
@@ -71,9 +71,7 @@ export default function VisionMission() {
               </div>
               <p className="text-gray-400 text-xl md:text-3xl leading-tight mb-10 tracking-tight">
                 <span className="content-hover">
-                  Every project is a chance to blend design and development, shaping bold interactive ideas into{' '}
-                  <strong className="text-white font-bold">sleek digital realities — built with</strong>{' '}
-                  intent, speed, and visual clarity that attracts lot of peoples.
+                  Menjadi wadah bagi mahasiswa untuk <strong className="text-white font-bold">mengembangkan bakat dan hobinya di bidang non-akademik</strong>, sekaligus meraih prestasi melalui esports
                 </span>
               </p>
             </div>
@@ -138,9 +136,8 @@ export default function VisionMission() {
               </div>
               <p className="text-gray-400 text-xl md:text-3xl leading-tight mb-10 tracking-tight">
                 <span className="content-hover">
-                  Redefining the standard of web aesthetics by pushing the boundaries of what&apos;s possible in the browser. We create{' '}
-                  <strong className="text-white font-bold">immersive and tactile experiences</strong>{' '}
-                  that leave a lasting impact.
+                  Menjadi organisasi esports universitas terdepan yang mampu <strong className="text-white font-bold">mengasah bakat, mendorong inovasi, serta membangun komunitas yang dinamis</strong>, 
+                  di mana mahasiswa dapat berprestasi baik dalam kompetisi maupun peran industri kreatif dan esports.
                 </span>
               </p>
             </div>

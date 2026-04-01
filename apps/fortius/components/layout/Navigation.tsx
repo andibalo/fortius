@@ -9,14 +9,15 @@ import { useEffect, useId, useRef, useState } from "react";
 type NavItem = {
   label: string;
   href: string;
+  disabled?: boolean;
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Merchandise", href: "/merchandise" },
-  { label: "Tournaments", href: "/tournaments" },
-  { label: "About", href: "/about" },
+  { label: "Home", href: "/", disabled: false },
+  { label: "Gallery", href: "/gallery", disabled: true },
+  { label: "Merchandise", href: "/merchandise", disabled: true },
+  { label: "Tournaments", href: "/tournaments", disabled: true },
+  { label: "News", href: "/news", disabled: true },
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -124,7 +125,7 @@ export default function Navigation() {
     const diff = Math.abs((((normalized - centerAngle + 540) % 360) - 180));
     const withinSlice = diff <= slice / 2 - gap / 2;
 
-    return withinSlice ? index : null;
+    return withinSlice && !NAV_ITEMS[index]?.disabled ? index : null;
   };
 
   const updateHoveredFromPointer = (clientX: number, clientY: number) => {
@@ -231,11 +232,11 @@ export default function Navigation() {
                       key={item.href}
                       d={describeRingSegmentPath(cx, cy, innerR, outerR, start, end)}
                       fill={isHighlighted ? "var(--primary)" : "white"}
-                      fillOpacity={isHighlighted ? 0.22 : 0.06}
+                      fillOpacity={item.disabled ? 0.02 : isHighlighted ? 0.22 : 0.06}
                       stroke={isHighlighted ? "var(--primary)" : "white"}
-                      strokeOpacity={isHighlighted ? 0.65 : 0.12}
+                      strokeOpacity={item.disabled ? 0.04 : isHighlighted ? 0.65 : 0.12}
                       strokeWidth={1}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: item.disabled ? "not-allowed" : "pointer", filter: item.disabled ? "blur(0.8px)" : "none" }}
                     />
                   );
                 })}
@@ -285,17 +286,27 @@ export default function Navigation() {
                       }}
                     >
                       <div
-                        className="pointer-events-none flex items-center justify-center h-14 w-14 md:h-16 md:w-16"
+                        className="pointer-events-none flex flex-col items-center justify-center h-14 w-14 md:h-16 md:w-16 gap-0.5"
                         aria-hidden="true"
                       >
                         <span
                           className={
                             "font-oswald text-[10px] md:text-[11px] font-bold tracking-widest transition-colors duration-500 " +
-                            (active ? "text-[color:var(--primary)]" : "text-white/80")
+                            (active ? "text-[color:var(--primary)]" : "text-white/80") +
+                            (item.disabled && " opacity-40")
                           }
                         >
                           {item.label.toUpperCase()}
                         </span>
+                        {item.disabled && (
+                          <span
+                            className={
+                              "font-oswald text-[8px] md:text-[9px] font-bold tracking-widest transition-colors duration-500 text-white/60"
+                            }
+                          >
+                            COMING SOON
+                          </span>
+                        )}
                       </div>
                     </motion.div>
                   </div>

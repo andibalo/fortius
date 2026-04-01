@@ -6,27 +6,33 @@ import { motion, AnimatePresence } from 'motion/react';
 const faqs = [
   {
     id: '01',
-    question: 'What services do you offer?',
+    question: 'Bagaimana cara bergabung sebagai pemain?',
     answer:
-      'We offer comprehensive esports management, talent scouting, content production, and strategic brand partnerships designed to elevate competitive gaming organizations.',
+      'Untuk menjadi pemain Fortius, kamu harus terdaftar sebagai mahasiswa Universitas Multimedia Nusantara. Akan ada open recruitment, di mana calon peserta akan melalui tahap seleksi dan trial. Jika kamu bukan mahasiswa UMN, kamu tetap bisa bergabung dengan komunitas kami melalui server Discord di mana kamu dapat bermain dan membangun koneksi dengan gamers lainnya.',
   },
   {
     id: '02',
-    question: 'What is your typical turnaround time?',
+    question: 'Kapan open recruitment dilaksanakan?',
     answer:
-      'Depending on the scale of the campaign or tournament preparation, timelines range from 2 weeks for rapid deployments to 3 months for full-scale seasonal strategies.',
+      'Open recruitment biasanya diadakan dua kali dalam setahun untuk menyambut pemain baru maupun anggota tim manajemen Fortius Esports. Ikuti media sosial kami untuk mendapatkan pengumuman dan pembaruan agar tidak ketinggalan kesempatan mendaftar.',
   },
   {
     id: '03',
-    question: 'Do you only work in esports?',
+    question: 'Bisakah saya bergabung dengan Fortius jika saya bukan pemain?',
     answer:
-      'While our roots are in competitive gaming, our digital production and marketing divisions work with tech brands, lifestyle apparel, and entertainment sectors.',
+      'Tentu saja! Fortius tidak hanya berfokus pada kompetisi, tetapi juga membangun organisasi yang solid. Kami memiliki divisi di luar game seperti website development, public relations, brand ambassador, desain grafis, dokumentasi, dan content creation. Jadi jika kamu tertarik dengan dunia esports namun bukan pemain, tetap ada tempat untukmu di sini.',
   },
   {
     id: '04',
-    question: "What's your process like?",
+    question: "Apa saja keuntungan menjadi pemain?",
     answer:
-      'Discovery, Strategy, Execution, and Domination. We align on goals, build the infrastructure, deploy the talent, and measure the impact with ruthless efficiency.',
+      'Sebagai pemain Fortius, kamu akan mendapatkan dukungan penuh untuk berkembang dan berkompetisi. Biaya turnamen ditanggung, serta kamu akan dibimbing oleh pelatih dan manajer tim. Untuk turnamen offline, kami juga menanggung biaya akomodasi dan kebutuhanmu, sehingga kamu bisa fokus sepenuhnya pada performa terbaikmu.',
+  },
+  {
+    id: '05',
+    question: "Bagaimana jika game yang saya kuasai belum tersedia di Fortius?",
+    answer:
+      'Kami selalu terbuka untuk membuka divisi game baru! Jika game yang kamu mainkan belum menjadi bagian dari divisi kami, bisa langsung DM kami. Kami dengan senang hati akan mempertimbangkan untuk menambahkan tim baru berdasarkan minat dan potensi mahasiswa.',
   },
 ];
 

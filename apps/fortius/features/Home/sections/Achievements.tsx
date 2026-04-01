@@ -1,43 +1,44 @@
 'use client';
 
 import { useRef } from 'react';
+import Image from 'next/image';
 import { useScroll, useTransform, motion, MotionValue } from 'motion/react';
 
 const ITEMS = [
   {
     id: '01',
     category: 'VALORANT',
-    title: 'REGIONAL\nCHAMPS',
-    year: '2026',
-    img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop',
+    title: '1st \nAdvan Championship',
+    year: '2025',
+    img: '/images/valorant-advan-champion.webp',
   },
   {
     id: '02',
     category: 'MOBILE LEGENDS',
-    title: 'NATIONAL\nCUP',
+    title: 'Runner Up\nIEL',
     year: '2025',
-    img: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop',
+    img: '/images/mole-iel-runner-up.jpg',
   },
   {
     id: '03',
-    category: 'PUBG MOBILE',
-    title: 'GRAND\nFINALS',
-    year: '2025',
-    img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop',
+    category: 'VALORANT',
+    title: '1st\nUI Battlegrounds',
+    year: '2023',
+    img: '/images/valorant-uibg-champion.webp',
   },
   {
     id: '04',
     category: 'SEASON AWARD',
     title: 'MVP\nX14',
     year: '2024',
-    img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2071&auto=format&fit=crop',
+    img: '/images/valorant-advan-champion.webp',
   },
   {
     id: '05',
     category: 'COMMUNITY',
     title: '1M\nFANBASE',
     year: '2024',
-    img: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=2070&auto=format&fit=crop',
+    img: '/images/valorant-advan-champion.webp',
   },
 ];
 
@@ -95,16 +96,16 @@ function Card({
         className="w-[min(620px,80vw)] will-change-transform"
       >
         <div className="relative aspect-[3/2] rounded-2xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.85)]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={item.img}
-            className="w-full h-full object-cover"
             alt={item.title}
+            fill
+            className="object-cover"
             draggable={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
-          <span className="absolute top-5 right-6 text-[10px] font-mono text-white/40 tracking-widest">
+          <span className="absolute top-5 right-6 text-[16px] font-mono text-white/40 tracking-widest">
             {item.year}
           </span>
 

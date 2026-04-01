@@ -8,7 +8,20 @@ export default function Preloader() {
   const [done, setDone] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const preventScroll = useRef<(e: Event) => void>(() => {});
+
   useEffect(() => {
+    preventScroll.current = (e: Event) => e.preventDefault();
+    
+    document.documentElement.style.position = 'fixed';
+    document.documentElement.style.width = '100%';
+    document.documentElement.style.height = '100%';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.pointerEvents = 'none';
+
+    document.addEventListener('wheel', preventScroll.current, { passive: false });
+    document.addEventListener('touchmove', preventScroll.current, { passive: false });
+
     intervalRef.current = setInterval(() => {
       setProgress((prev) => {
         const next = prev + Math.floor(Math.random() * 12) + 4;
@@ -21,14 +34,28 @@ export default function Preloader() {
       });
     }, 80);
 
-    return () => clearInterval(intervalRef.current!);
+    return () => {
+      clearInterval(intervalRef.current!);
+    };
   }, []);
+
+  useEffect(() => {
+    if (done) {
+      document.documentElement.style.position = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.pointerEvents = '';
+      document.removeEventListener('wheel', preventScroll.current);
+      document.removeEventListener('touchmove', preventScroll.current);
+    }
+  }, [done]);
 
   return (
     <AnimatePresence>
       {!done && (
         <motion.div
-          className="fixed inset-0 z-[10000] bg-[#050505] flex flex-col items-center justify-center"
+          className="fixed inset-0 z-[10000] bg-[#050505] flex flex-col items-center justify-center pointer-events-auto"
           exit={{ y: '-100%' }}
           transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
         >
