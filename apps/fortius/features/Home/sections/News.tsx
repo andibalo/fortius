@@ -2,6 +2,8 @@
 
 import { useRef } from 'react';
 import { useScroll, useTransform, motion } from 'motion/react';
+import { useResponsive } from '@/hooks/useResponsive';
+import NewsMobile from './News.Mobile';
 
 const NEWS_ITEMS = [
   {
@@ -26,33 +28,10 @@ const NEWS_ITEMS = [
     badgeClass: 'bg-[#9b00e8] text-white',
     accentColor: '#9b00e8',
   },
-  // To add more cards, uncomment or append items here — transforms auto-adjust.
-  // {
-  //   id: '03',
-  //   category: 'ROSTER',
-  //   date: 'FEB 2026',
-  //   title: 'Introducing Our New Mobile Legends Lineup',
-  //   description:
-  //     'Seven new players join the Fortius family as we expand our Mobile Legends division ahead of the 2026 season. Meet the squad built to dominate.',
-  //   gradientClass: 'from-[#c1121f]/70 via-[#800010]/50 to-[#100004]',
-  //   badgeClass: 'bg-[#c1121f] text-white',
-  //   accentColor: '#c1121f',
-  // },
-  // {
-  //   id: '04',
-  //   category: 'PARTNERSHIP',
-  //   date: 'JAN 2026',
-  //   title: 'Fortius x TechArena: Official Gear Partnership',
-  //   description:
-  //     'We have partnered with TechArena to equip every Fortius athlete with cutting-edge peripherals and custom rigs, ensuring peak performance under pressure.',
-  //   gradientClass: 'from-white/25 via-white/10 to-[#0e0e0e]',
-  //   badgeClass: 'bg-white text-[#050505]',
-  //   accentColor: '#ffffff',
-  // },
 ];
 
 const COUNT = NEWS_ITEMS.length;
-const ENTRY_DUR = 0.12; 
+const ENTRY_DUR = 0.12;
 const STEP = COUNT > 1 ? (0.8 - ENTRY_DUR) / (COUNT - 1) : 0.68;
 const SECTION_HEIGHT = `${COUNT * 150}vh`;
 
@@ -93,17 +72,17 @@ function activeIdx(v: number): number {
   return 0;
 }
 
-export default function News() {
+function NewsDesktop() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  const c0Y     = useTransform(scrollYProgress, Y[0].input,  Y[0].output);
-  const c1Y     = useTransform(scrollYProgress, Y[1].input,  Y[1].output);
-  const c2Y     = useTransform(scrollYProgress, Y[2].input,  Y[2].output);
-  const c3Y     = useTransform(scrollYProgress, Y[3].input,  Y[3].output);
+  const c0Y = useTransform(scrollYProgress, Y[0].input, Y[0].output);
+  const c1Y = useTransform(scrollYProgress, Y[1].input, Y[1].output);
+  const c2Y = useTransform(scrollYProgress, Y[2].input, Y[2].output);
+  const c3Y = useTransform(scrollYProgress, Y[3].input, Y[3].output);
 
   const c0Scale = useTransform(scrollYProgress, SC[0].input, SC[0].output);
   const c1Scale = useTransform(scrollYProgress, SC[1].input, SC[1].output);
@@ -148,7 +127,7 @@ export default function News() {
   const d3Width = useTransform(scrollYProgress, (v) => activeIdx(v) === 3 ? '1.5rem' : '0.5rem');
 
   const dotOpacities = [d0Opacity, d1Opacity, d2Opacity, d3Opacity];
-  const dotWidths    = [d0Width,   d1Width,   d2Width,   d3Width];
+  const dotWidths = [d0Width, d1Width, d2Width, d3Width];
 
   return (
     <section
@@ -158,9 +137,8 @@ export default function News() {
       style={{ height: SECTION_HEIGHT }}
     >
       <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-none">
-
         {/* Section header */}
-        <div className="absolute top-10 left-0 right-0 px-6 md:px-12 flex items-end justify-between z-50">
+        <div className="absolute top-10 left-0 right-0 px-12 flex items-end justify-between z-50">
           <div className="flex items-baseline gap-4">
             <span
               className="font-oswald font-bold leading-none text-[#9b00e8]/15 text-[8vw]"
@@ -185,19 +163,18 @@ export default function News() {
         {NEWS_ITEMS.map((item, i) => (
           <div
             key={item.id}
-            className="absolute inset-0 flex items-center justify-center px-6 md:px-12"
+            className="absolute inset-0 flex items-center justify-center px-12"
             style={{ zIndex: cardTransforms[i].zIndex }}
           >
             <motion.article
               className="w-full max-w-5xl pointer-events-auto"
               style={{
-                y:       cardTransforms[i].y,
-                scale:   cardTransforms[i].scale,
+                y: cardTransforms[i].y,
+                scale: cardTransforms[i].scale,
                 opacity: cardTransforms[i].opacity,
               }}
             >
               <div className="news-card glass-box bg-[#0e0e0e] rounded-[2rem] border border-white/20 overflow-hidden grid grid-cols-1 md:grid-cols-2 interactive">
-
                 {/* Image area */}
                 <div className={`relative overflow-hidden aspect-[4/3] md:aspect-auto bg-[#111] bg-gradient-to-br ${item.gradientClass}`}>
                   <div className="absolute inset-0 bg-grid-pattern" />
@@ -229,20 +206,22 @@ export default function News() {
                       {item.description}
                     </p>
                   </div>
-                  {/* <a
-                    href="#"
-                    className="btn-swipe w-max mt-8 border border-white/30 rounded-full px-8 py-3 text-xs font-bold tracking-widest text-white inline-block"
-                  >
-                    <span>READ MORE</span>
-                  </a> */}
                 </div>
-
               </div>
             </motion.article>
           </div>
         ))}
-
       </div>
     </section>
   );
+}
+
+export default function News() {
+  const { isMobile, isTablet } = useResponsive();
+
+  if (isMobile || isTablet) {
+    return <NewsMobile />;
+  }
+
+  return <NewsDesktop />;
 }

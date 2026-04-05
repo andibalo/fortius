@@ -510,3 +510,102 @@ a:hover .hover-smooth,
   perspective: 1500px;
   transform-style: preserve-3d;
 }
+
+
+/* ─── Responsive Enhancements ───────────────────────────────────────────── */
+
+/* 📱 Mobile (≤ 640px) */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+
+  .tracking-impact {
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .tracking-impact-extreme {
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+  }
+
+  .nav-links {
+    gap: 1.5rem !important;
+  }
+
+  .stat-card {
+    flex: 100%;
+    padding: 1.5rem;
+  }
+
+  .team-row {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .team-row:hover {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .division-item:hover {
+    transform: scale(1.05) !important;
+  }
+
+  .cursor-dot,
+  .cursor-outline {
+    display: none !important;
+  }
+
+  .glass-box {
+    backdrop-filter: blur(10px);
+  }
+} 
+
+/* 📲 Tablet (641px - 1024px) */
+@media (max-width: 1024px) {
+  .nav-links {
+    gap: 2rem;
+  }
+
+  .stat-card {
+    flex: 1 1 45%;
+  }
+
+  .division-item:hover {
+    transform: scale(1.08) !important;
+  }
+
+  .team-row:hover {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* 💻 Small Laptop (1025px - 1280px) */
+@media (max-width: 1280px) {
+  .nav-links:hover {
+    gap: 2.5rem;
+  }
+
+  .division-item:hover {
+    transform: scale(1.1) translateZ(20px) !important;
+  }
+}
+
+/* 🖥️ Ultra Wide (>1600px) */
+@media (min-width: 1600px) {
+  .tracking-impact {
+    font-size: clamp(3rem, 6vw, 8rem);
+  }
+
+  .tracking-impact-extreme {
+    font-size: clamp(4rem, 8vw, 10rem);
+  }
+
+  .container-wide {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}

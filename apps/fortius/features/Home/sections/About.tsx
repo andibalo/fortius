@@ -3,6 +3,8 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
 import { clamp, easeOutBack } from '@/lib/scrollUtils';
+import { useResponsive } from '@/hooks/useResponsive';
+import AboutMobile from './About.Mobile';
 
 const STATS = [
   {
@@ -65,21 +67,21 @@ function StatCard({
   return (
     <motion.div
       style={{ x, y, rotate, scale, opacity }}
-      className="stat-card relative glass-box p-6 md:p-8 rounded-2xl border border-white/10 hover:border-white hover:bg-white interactive group overflow-hidden cursor-pointer will-change-transform"
+      className="stat-card relative glass-box p-6 lg:p-8 rounded-xl lg:rounded-2xl border border-white/10 hover:border-white hover:bg-white interactive group overflow-hidden cursor-pointer will-change-transform min-h-[220px] lg:min-h-[260px]"
     >
       <div className="relative z-10 flex flex-col justify-center transition-transform duration-700 group-hover:-translate-y-2">
         <span
-          className="font-oswald text-4xl lg:text-5xl font-bold text-white group-hover:text-black transition-colors tracking-impact"
+          className="font-oswald text-3xl lg:text-4xl xl:text-5xl font-bold text-white group-hover:text-black transition-colors tracking-impact"
           style={{ fontFamily: 'var(--font-oswald)' }}
         >
           {value}
         </span>
-        <span className="text-xs md:text-sm font-bold tracking-widest text-gray-500 group-hover:text-black mt-5 block uppercase transition-colors">
+        <span className="text-xs font-bold tracking-widest text-gray-500 group-hover:text-black mt-5 block uppercase transition-colors">
           {label}
         </span>
         <div className="expandable-content">
           <div className="expandable-inner">
-            <p className="text-[11px] md:text-xs text-white leading-tight font-bold pb-2">{detail}</p>
+            <p className="text-xs text-white leading-tight font-bold pb-2">{detail}</p>
           </div>
         </div>
       </div>
@@ -87,7 +89,7 @@ function StatCard({
   );
 }
 
-export default function About() {
+function AboutDesktop() {
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -128,10 +130,10 @@ export default function About() {
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#6200a8] rounded-full mix-blend-screen filter blur-[180px] pointer-events-none"
           style={{ scale: glowScale, opacity: glowOpacity, y: glowY }}
         />
-        <div className="relative z-10 max-w-screen-2xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+        <div className="relative z-10 max-w-screen-2xl mx-auto w-full px-12 grid grid-cols-12 gap-24 items-center">
           <motion.div
             style={{ x: cardX, y: cardY, rotate: cardRotate, scale: cardScale, opacity: cardOpacity }}
-            className="lg:col-span-5 relative group interactive animate-float-1 will-change-transform"
+            className="col-span-5 relative group interactive animate-float-1 will-change-transform"
           >
             <div className="absolute inset-0 bg-[#9b00e8] rounded-[2rem] blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
             <div className="clip-reveal relative aspect-[4/5] glass-box rounded-[2rem] border border-white/20 p-8 flex flex-col justify-between overflow-hidden group-hover:-translate-y-4 shadow-2xl transition-transform duration-700">
@@ -149,7 +151,7 @@ export default function About() {
               </div>
               <div className="relative z-10 mt-auto">
                 <h3
-                  className="text-5xl md:text-6xl font-oswald font-bold tracking-impact uppercase mb-4 text-white"
+                  className="text-5xl xl:text-6xl font-oswald font-bold tracking-impact uppercase mb-4 text-white"
                   style={{ fontFamily: 'var(--font-oswald)' }}
                 >
                   <span className="content-hover">LINK</span>
@@ -158,10 +160,10 @@ export default function About() {
                 </h3>
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 text-sm font-mono text-[#9b00e8] hover:text-white transition-colors duration-500"
+                  className="inline-flex items-center gap-2 text-xs font-mono text-[#9b00e8] hover:text-white transition-colors duration-500"
                 >
                   <span className="hover-smooth">tinyurl.com/FORTIUSGEN7</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-2 transition-transform duration-500">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-2 transition-transform duration-500">
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
                   </svg>
@@ -169,11 +171,10 @@ export default function About() {
               </div>
             </div>
           </motion.div>
-          <div className="lg:col-span-7 flex flex-col justify-center relative z-10">
-
+          <div className="col-span-7 flex flex-col justify-center relative z-10">
             <motion.div style={{ x: headX, y: headY, rotate: headRotate, opacity: headOpacity }} className="will-change-transform">
               <h2
-                className="text-2xl md:text-4xl text-white mb-8 font-bold tracking-widest uppercase flex items-center gap-6 font-oswald"
+                className="text-3xl xl:text-4xl text-white mb-8 font-bold tracking-widest uppercase flex items-center gap-6 font-oswald"
                 style={{ fontFamily: 'var(--font-oswald)' }}
               >
                 <span className="content-hover">ABOUT US</span>
@@ -182,14 +183,14 @@ export default function About() {
             </motion.div>
             <motion.p
               style={{ y: bodyY, opacity: bodyOpacity }}
-              className="text-xl md:text-3xl text-gray-400 leading-tight font-light mb-12 max-w-4xl tracking-tight will-change-transform"
+              className="text-xl xl:text-3xl text-gray-400 leading-tight font-light mb-12 max-w-4xl tracking-tight will-change-transform"
             >
               <span className="content-hover">
                 <strong className="text-white font-medium">Fortius Esports</strong> adalah organisasi olahraga elektronik <strong className="text-white font-medium">Universitas Multimedia Nusantara</strong> yang didirikan pada Februari 2019.
                 Kami menyediakan wadah bagi mahasiswa untuk mengeksplorasi dan mengembangkan bakat mereka di dunia esports yang dinamis, baik sebagai pemain kompetitif maupun sebagai bagian dari tim manajemen.
               </span>
             </motion.p>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-16 md:mt-24 w-full items-start">
+            <div className="flex flex-row gap-6 mt-24 w-full items-start">
               {STATS.map((stat) => (
                 <StatCard key={stat.label} {...stat} scrollYProgress={scrollYProgress} />
               ))}
@@ -199,4 +200,14 @@ export default function About() {
       </div>
     </section>
   );
+}
+
+export default function About() {
+  const { isMobile, isTablet } = useResponsive();
+
+  if (isMobile || isTablet) {
+    return <AboutMobile />;
+  }
+
+  return <AboutDesktop />;
 }

@@ -59,10 +59,15 @@ export default function HeroParticleSphere() {
     const targetMousePos = new THREE.Vector3();
 
     const updateGroupPosition = () => {
-      if (window.innerWidth > 768) {
-        group.position.set(3.4, 0.6, 0);
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+
+      if (isTablet) {
+        group.position.set(2.0, 1.0, 0);
+      } else if (isMobile) {
+        group.position.set(0, 1.5, 0);
       } else {
-        group.position.set(0, 2.2, 0);
+        group.position.set(3.4, 0.6, 0);
       }
     };
     updateGroupPosition();
