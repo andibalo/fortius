@@ -1,0 +1,56 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik-local
+    command:
+      - "--api.insecure=true"           
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8090:8080"                    
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - local
+
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    container_name: api-local
+    env_file: .env.local
+    networks:
+      - local
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-local.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.api-local.entrypoints=web"
+      - "traefik.http.services.api-local.loadbalancer.server.port=8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-local
+    env_file: .env.local
+    ports:
+      - "5432:5432"                 
+    volumes:
+      - postgres-local-data:/var/lib/postgresql/data
+    networks:
+      - local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-local-data:
+
+networks:
+  local:

@@ -19,6 +19,12 @@ apps/api/bin/
 .env
 .env.local
 .env.*.local
+infra/.env.prod
+infra/.env.stg
+infra/.env.local
+
+# Traefik SSL certs (auto-generated, contains private keys)
+infra/traefik/acme.json
 
 # OS
 .DS_Store
