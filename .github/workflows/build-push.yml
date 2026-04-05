@@ -1,0 +1,49 @@
+# name: Build & Push API
+
+# on:
+#   push:
+#     branches:
+#       - master   # → prod image
+#       - staging  # → stg image
+#     paths:
+#       - "apps/api/**"
+
+# env:
+#   REGISTRY: ghcr.io
+#   IMAGE: ghcr.io/andibalo/fortius-api
+
+# jobs:
+#   build-push:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       packages: write
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Determine tag
+#         id: tag
+#         run: |
+#           if [[ "${{ github.ref_name }}" == "master" ]]; then
+#             echo "tag=prod" >> $GITHUB_OUTPUT
+#           else
+#             echo "tag=stg" >> $GITHUB_OUTPUT
+#           fi
+
+#       - name: Log in to GHCR
+#         uses: docker/login-action@v3
+#         with:
+#           registry: ${{ env.REGISTRY }}
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Build and push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: apps/api
+#           push: true
+#           tags: |
+#             ${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
+#             ${{ env.IMAGE }}:sha-${{ github.sha }}
